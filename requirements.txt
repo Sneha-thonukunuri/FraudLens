@@ -10,4 +10,5 @@ opencv-python-headless>=4.8
 pytesseract>=0.3.10   # also install the Tesseract binary on your OS
 python-dotenv>=1.0
 pytest>=8.0
-qrcode>=7.4           # used only by the QR tests
+qrcode[pil]>=7.4
+google-genai>=1.0.0

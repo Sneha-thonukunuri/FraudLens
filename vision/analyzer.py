@@ -7,7 +7,12 @@ import numpy as np
 from PIL import Image, ImageFilter, ImageOps
 from common.schema import AnalysisResult
 from nlp.analyzer import analyze_text
-
+import os
+from dotenv import load_dotenv
+from google import genai
+from google.genai import types
+load_dotenv()
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 WINDOWS_TESSERACT = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
@@ -101,19 +106,59 @@ def inspect_image(image_bytes: bytes) -> list:
         print(f"Image inspection error: {e}")
         return ["Image quality inspection unavailable"]
 
+def analyze_image_with_gemini(image_bytes: bytes) -> str:
+    try:
+        image = Image.open(io.BytesIO(image_bytes))
+        image_format = image.format.lower()
 
+        mime_type = {
+            "jpeg": "image/jpeg",
+            "png": "image/png",
+            "webp": "image/webp"
+        }.get(image_format, "image/png")
+
+        response = client.models.generate_content(
+            model="gemini-3.5-flash",
+            contents=[
+                types.Part.from_bytes(
+                    data=image_bytes,
+                    mime_type=mime_type
+                ),
+                """
+                Analyze this screenshot for possible fraud.
+
+                Look for:
+                1. Fake or suspicious logos.
+                2. Impersonation of banks or companies.
+                3. Fake website or payment layouts.
+                4. Suspicious QR codes.
+                5. Visual signs of phishing.
+
+                Explain the visual evidence you find.
+                Do not assume an image is fraudulent without evidence.
+                """
+            ]
+        )
+        
+        return response.text or "Gemini returned no analysis."
+
+    except Exception as e:
+        print(f"Gemini image analysis error: {e}")
+        return "Gemini image analysis unavailable."
 def analyze_screenshot(image_bytes: bytes) -> AnalysisResult:
     text = extract_text(image_bytes)
     visual_signals = inspect_image(image_bytes)
-
+    
+    gemini_analysis = analyze_image_with_gemini(image_bytes)
     if not text.strip():
         return AnalysisResult(
             source="screenshot",
             signals=visual_signals + ["No text extracted by OCR"],
-            explanation=(
+           explanation=(
                 "No readable text was extracted. "
                 "Image quality and QR-code checks were performed "
-                "where possible."
+                "where possible. "
+                "Gemini visual analysis: " + gemini_analysis
             )
         )
 
@@ -128,7 +173,7 @@ def analyze_screenshot(image_bytes: bytes) -> AnalysisResult:
                 + visual_signals
             ),
             "explanation": (
-                result.explanation
+                result.explanation + " Gemini visual analysis: " + gemini_analysis
                 + " Visual inspection: "
                 + (
                     ", ".join(visual_signals)
