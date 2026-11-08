@@ -6,7 +6,7 @@ Multimodal LLM scam detector: text, screenshots, URLs, conversations -> risk sco
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env
-pytest                                   # should pass on the mocks
+pytest                                   # no API key or network needed
 uvicorn system.api:app --reload          # API at http://127.0.0.1:8000/docs
 streamlit run system/dashboard.py        # dashboard
 ```
@@ -24,3 +24,18 @@ streamlit run system/dashboard.py        # dashboard
 - Keep function signatures unchanged; replace the mock internals.
 - Each member works on their own branch and opens a PR to `main`.
 - Add a test in `tests/` for every new function.
+
+## LLM configuration (Member 1)
+`nlp/analyzer.py` calls an LLM when `.env` has `LLM_API_KEY` and `LLM_MODEL`
+(`LLM_PROVIDER=anthropic` by default, or `openai` for OpenAI-compatible APIs;
+optional `LLM_BASE_URL`). The reply is validated into an `AnalysisResult`.
+If no key is set, or a call/parse fails, the keyword analyzer is used instead.
+Tests never call a real LLM.
+
+## OCR
+`vision/analyzer.py` needs the Tesseract binary. It is found on PATH, at the default
+Windows install path, or at `TESSERACT_CMD` from `.env`.
+
+## Evaluation
+`python -m system.evaluate` compares approaches on `data/eval_set.jsonl`
+(synthetic and small: indicative only, not real-world accuracy).

@@ -1,9 +1,10 @@
 """MEMBER 3: evaluation pipeline.
 Run from the project root:  python -m system.evaluate
-Compares four approaches on data/eval_set.jsonl (binary task: scam vs legitimate):
+Compares these approaches on data/eval_set.jsonl (binary task: scam vs legitimate):
   1. keyword_baseline : a plain keyword rule (no analyzers)
   2. url_only         : analyze_url alone
-  3. text_only        : analyze_text alone
+  3. text_only        : analyze_text alone (LLM if configured, else keywords)
+  3b. text_keywords_only : keyword analyzer alone
   4. integrated       : analyze_text + analyze_url combined with fuse()
 Results describe THIS dataset only. The dataset is small and synthetic, so the
 numbers are prototype indicators, not real-world accuracy."""
@@ -14,7 +15,7 @@ from datetime import datetime
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
-from nlp.analyzer import analyze_text
+from nlp.analyzer import analyze_text, analyze_text_keywords
 from system.url_analyzer import analyze_url
 from system.fusion import fuse
 
@@ -76,6 +77,12 @@ def text_only(row):
     return v.recommendation != "safe", v.score
 
 
+def text_keywords_only(row):
+    """Keyword analyzer alone. Compare with text_only to see what the LLM adds."""
+    v = fuse([analyze_text_keywords(row["text"])])
+    return v.recommendation != "safe", v.score
+
+
 def integrated_warn(row):
     results = [analyze_text(row["text"])]
     if row["url"].strip():
@@ -96,6 +103,7 @@ APPROACHES = {
     "keyword_baseline": keyword_baseline,
     "url_only": url_only,
     "text_only": text_only,
+    "text_keywords_only": text_keywords_only,
     "integrated (warn or block = scam)": integrated_warn,
     "integrated (block only = scam)": integrated_block,
 }
