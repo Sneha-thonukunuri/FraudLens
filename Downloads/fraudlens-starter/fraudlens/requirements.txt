@@ -8,3 +8,4 @@ pillow>=10.0
 pytesseract>=0.3.10   # also install the Tesseract binary on your OS
 python-dotenv>=1.0
 pytest>=8.0
+qrcode[pil]>=7.4
