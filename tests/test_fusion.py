@@ -90,3 +90,14 @@ def test_unreadable_screenshot_is_not_reported_safe():
 def test_unreadable_screenshot_does_not_dilute_other_scores():
     v = fuse([mock(score=0.9), UNREADABLE])
     assert v.score == fuse([mock(score=0.9)]).score
+
+def test_unreadable_screenshot_is_never_reported_safe():
+    """Regression: a screenshot with no OCR text used to come back as 'safe'."""
+    from common.schema import AnalysisResult
+    r = AnalysisResult(
+        source="screenshot",
+        signals=["Screenshot may be blurry", "No text extracted by OCR"],
+        explanation="No readable text was extracted. Image quality and QR-code checks were performed where possible.")
+    v = fuse([r])
+    assert v.recommendation == "warn"
+    assert "NOT a safety confirmation" in v.explanation

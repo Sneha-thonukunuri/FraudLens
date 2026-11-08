@@ -13,7 +13,7 @@ W_MAX, W_MEAN = 0.6, 0.4
 
 # Stopgap: phrases an analyzer uses when it could not analyze its input.
 # TODO: replace with an explicit field once the team agrees on a schema change.
-INCONCLUSIVE_MARKERS = ("no text extracted",)
+INCONCLUSIVE_MARKERS = ("no text extracted", "no readable text")
 
 ADVICE = {
     "safe": ("No strong scam indicators were found, but this is not a guarantee. "
@@ -27,8 +27,10 @@ ADVICE = {
 
 def _inconclusive(r: AnalysisResult) -> bool:
     """True if the analyzer produced nothing because it could not read its input."""
-    text = r.explanation.lower()
-    return r.score == 0.0 and not r.signals and any(m in text for m in INCONCLUSIVE_MARKERS)
+    # Look in the explanation AND the signals: the vision analyzer reports an
+    # empty OCR result with extra visual signals, so signals are not always empty.
+    text = (r.explanation + " " + " ".join(r.signals)).lower()
+    return r.score == 0.0 and any(m in text for m in INCONCLUSIVE_MARKERS)
 
 
 def _pick_category(results: List[AnalysisResult]) -> str:

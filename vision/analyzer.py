@@ -1,23 +1,59 @@
 
 import io
+import os
 import cv2
 import numpy as np
 
-from PIL import Image
+from PIL import Image, ImageFilter, ImageOps
 from common.schema import AnalysisResult
 from nlp.analyzer import analyze_text
+
+
+WINDOWS_TESSERACT = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+
+def _configure_tesseract(pytesseract) -> None:
+    """Use TESSERACT_CMD from the environment if set, else the default Windows
+    install path if it exists, else rely on `tesseract` being on PATH."""
+    cmd = os.environ.get("TESSERACT_CMD")
+    if cmd:
+        pytesseract.pytesseract.tesseract_cmd = cmd
+    elif os.path.exists(WINDOWS_TESSERACT):
+        pytesseract.pytesseract.tesseract_cmd = WINDOWS_TESSERACT
 
 
 def extract_text(image_bytes: bytes) -> str:
     try:
         import pytesseract
 
-        pytesseract.pytesseract.tesseract_cmd = (
-            r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+        _configure_tesseract(pytesseract)
+
+        # Open screenshot
+        image = Image.open(io.BytesIO(image_bytes))
+
+        # Convert to grayscale
+        image = image.convert("L")
+
+        # Increase image size
+        image = image.resize(
+            (image.width * 2, image.height * 2)
         )
 
-        image = Image.open(io.BytesIO(image_bytes))
-        return pytesseract.image_to_string(image)
+        # Improve contrast
+        image = ImageOps.autocontrast(image)
+
+        # Improve sharpness
+        image = image.filter(
+            ImageFilter.SHARPEN
+        )
+
+        # Extract text using OCR
+        extracted_text = pytesseract.image_to_string(
+            image,
+            config="--oem 3 --psm 6"
+        )
+
+        return extracted_text.strip()
 
     except Exception as e:
         print(f"OCR error: {e}")
@@ -44,17 +80,20 @@ def inspect_image(image_bytes: bytes) -> list:
         contrast = gray.std()
         if contrast < 5:
             signals.append("Screenshot has very low visual detail")
-        elif sharpness < 80:
+        if sharpness < 80:
             signals.append("Screenshot may be blurry")
 
         detector = cv2.QRCodeDetector()
         qr_text, points, _ = detector.detectAndDecode(image_array)
 
-        if points is not None:
+        if points is not None and len(points) > 0:
             signals.append("QR code detected in screenshot")
 
             if qr_text:
-                signals.append("QR code contains an encoded destination")
+                signals.append("QR code contains encoded content")
+
+            if qr_text.startswith(("http://", "https://")):
+                signals.append("QR code contains a URL")
 
         return signals
 
