@@ -15,6 +15,7 @@ from datetime import datetime
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
+from nlp import llm_client
 from nlp.analyzer import analyze_text, analyze_text_keywords
 from system.url_analyzer import analyze_url
 from system.fusion import fuse
@@ -28,6 +29,24 @@ BASELINE_WORDS = ["urgent", "immediately", "blocked", "suspended", "kyc", "otp",
                   "verify", "winner", "won", "prize", "refund", "pay", "fee", "lottery",
                   "expire", "expires", "bank details", "pin", "deposit"]
 BASELINE_MIN_HITS = 2
+
+
+_text_cache = {}
+
+
+def cached_text(text):
+    """analyze_text once per message, so an LLM is not called repeatedly for the
+    same example by different approaches (saves quota and keeps runs consistent)."""
+    if text not in _text_cache:
+        _text_cache[text] = analyze_text(text)
+    return _text_cache[text]
+
+
+def fallback_count():
+    """How many text analyses used the keyword fallback although an LLM is configured."""
+    if not llm_client.is_configured():
+        return 0
+    return sum(r.explanation.startswith("[MOCK]") for r in _text_cache.values())
 
 
 def load_data(path=DATA_PATH):
@@ -73,7 +92,7 @@ def url_only(row):
 
 
 def text_only(row):
-    v = fuse([analyze_text(row["text"])])
+    v = fuse([cached_text(row["text"])])
     return v.recommendation != "safe", v.score
 
 
@@ -84,7 +103,7 @@ def text_keywords_only(row):
 
 
 def integrated_warn(row):
-    results = [analyze_text(row["text"])]
+    results = [cached_text(row["text"])]
     if row["url"].strip():
         results.append(analyze_url(row["url"]))
     v = fuse(results)
@@ -92,7 +111,7 @@ def integrated_warn(row):
 
 
 def integrated_block(row):
-    results = [analyze_text(row["text"])]
+    results = [cached_text(row["text"])]
     if row["url"].strip():
         results.append(analyze_url(row["url"]))
     v = fuse(results)
@@ -110,6 +129,7 @@ APPROACHES = {
 
 
 def evaluate(rows):
+    _text_cache.clear()
     report = {}
     for name, func in APPROACHES.items():
         y_true, y_pred, wrong, failed = [], [], [], 0
@@ -166,6 +186,11 @@ def main():
     rows = load_data()
     report = evaluate(rows)
     print_report(report, len(rows))
+    bad = fallback_count()
+    if bad:
+        print(f"\n(!) WARNING: {bad} of {len(_text_cache)} text analyses used the keyword "
+              "fallback because the LLM call failed.\n    The text_only / integrated rows "
+              "above are NOT valid LLM results. Fix the error above and re-run.")
     out = {"run_time": datetime.now().isoformat(timespec="seconds"),
            "dataset": DATA_PATH.name, "n_examples": len(rows), "results": report}
     OUT_PATH.write_text(json.dumps(out, indent=2), encoding="utf-8")

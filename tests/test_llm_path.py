@@ -125,11 +125,81 @@ def test_client_openai_request_and_parse(monkeypatch):
 
 def test_client_http_error_becomes_llm_unavailable(monkeypatch):
     configure(monkeypatch)
-    with pytest.raises(llm_client.LLMUnavailable):
+    monkeypatch.setattr(llm_client, "RETRY_DELAYS", ())      # no waiting in tests
+    with pytest.raises(llm_client.LLMUnavailable, match="HTTP 500"):
         llm_client.complete("s", "u", transport=_transport(lambda r: httpx.Response(500)))
+
+
+def test_busy_server_is_retried_then_succeeds(monkeypatch):
+    configure(monkeypatch)
+    monkeypatch.setattr(llm_client, "RETRY_DELAYS", (0, 0, 0))
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            return httpx.Response(503, json={"error": "high demand"})
+        return httpx.Response(200, json={"content": [{"type": "text", "text": "ok"}]})
+    assert llm_client.complete("s", "u", transport=_transport(handler)) == "ok"
+    assert calls["n"] == 3
+
+
+def test_busy_server_gives_up_after_retries(monkeypatch):
+    configure(monkeypatch)
+    monkeypatch.setattr(llm_client, "RETRY_DELAYS", (0, 0))
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        return httpx.Response(503)
+    with pytest.raises(llm_client.LLMUnavailable, match="HTTP 503"):
+        llm_client.complete("s", "u", transport=_transport(handler))
+    assert calls["n"] == 3                                    # 1 try + 2 retries
+
+
+def test_bad_key_is_not_retried(monkeypatch):
+    configure(monkeypatch)
+    monkeypatch.setattr(llm_client, "RETRY_DELAYS", (0, 0, 0))
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        return httpx.Response(401)
+    with pytest.raises(llm_client.LLMUnavailable, match="HTTP 401"):
+        llm_client.complete("s", "u", transport=_transport(handler))
+    assert calls["n"] == 1
 
 
 def test_client_unknown_provider(monkeypatch):
     configure(monkeypatch, "nope")
     with pytest.raises(llm_client.LLMUnavailable):
         llm_client.complete("s", "u")
+
+
+def test_retry_after_header_is_respected(monkeypatch):
+    configure(monkeypatch)
+    monkeypatch.setattr(llm_client, "RETRY_DELAYS", (1, 1))
+    waits = []
+    monkeypatch.setattr(llm_client.time, "sleep", lambda s: waits.append(s))
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return httpx.Response(429, headers={"retry-after": "7"}, json={"error": "slow"})
+        return httpx.Response(200, json={"content": [{"type": "text", "text": "ok"}]})
+    assert llm_client.complete("s", "u", transport=_transport(handler)) == "ok"
+    assert waits == [7.0]
+
+
+def test_wait_is_capped(monkeypatch):
+    configure(monkeypatch)
+    monkeypatch.setattr(llm_client, "RETRY_DELAYS", (1,))
+    waits = []
+    monkeypatch.setattr(llm_client.time, "sleep", lambda s: waits.append(s))
+
+    def handler(req):
+        return httpx.Response(429, headers={"retry-after": "9999"})
+    with pytest.raises(llm_client.LLMUnavailable):
+        llm_client.complete("s", "u", transport=_transport(handler))
+    assert waits == [llm_client.MAX_WAIT]
