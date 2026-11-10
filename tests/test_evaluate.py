@@ -21,3 +21,22 @@ def test_known_confusion_counts():
 def test_no_predicted_positives_does_not_divide_by_zero():
     m = compute_metrics([True, False], [False, False])
     assert m["precision"] == 0.0 and m["f1"] == 0.0
+
+def test_llm_called_once_per_message_and_fallback_counted(monkeypatch):
+    from system import evaluate as ev
+    from common.schema import AnalysisResult
+    calls = []
+
+    def fake(text):
+        calls.append(text)
+        return AnalysisResult(source="text", explanation="[MOCK] x")
+    monkeypatch.setattr(ev, "analyze_text", fake)
+    monkeypatch.setenv("LLM_API_KEY", "k")
+    monkeypatch.setenv("LLM_MODEL", "m")
+    ev._text_cache.clear()
+    row = {"text": "hello", "url": ""}
+    ev.text_only(row)
+    ev.integrated_warn(row)
+    ev.integrated_block(row)
+    assert calls == ["hello"]
+    assert ev.fallback_count() == 1
