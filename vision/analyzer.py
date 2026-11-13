@@ -7,12 +7,12 @@ import numpy as np
 from PIL import Image, ImageFilter, ImageOps
 from common.schema import AnalysisResult
 from nlp.analyzer import analyze_text
-import os
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 load_dotenv()
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+api_key = os.getenv("GEMINI_API_KEY")
+client = genai.Client(api_key=api_key) if api_key else None
 
 WINDOWS_TESSERACT = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
