@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-11-15T20:49:11",
+  "run_time": "2026-11-15T22:09:24",
   "dataset": "eval_set.jsonl",
   "n_examples": 80,
   "results": {
@@ -716,6 +716,56 @@
       ]
     },
     "text_only": {
+      "tp": 46,
+      "tn": 30,
+      "fp": 2,
+      "fn": 2,
+      "accuracy": 0.95,
+      "precision": 0.958,
+      "recall": 0.958,
+      "f1": 0.958,
+      "false_positive_rate": 0.062,
+      "failed_examples": 0,
+      "errors": [
+        {
+          "id": 15,
+          "label": "banking_kyc",
+          "predicted_scam": false,
+          "score": 0.2,
+          "difficulty": "easy",
+          "kind": "false_negative",
+          "text": "Your ICICI credit card reward points worth Rs 9,850 expire today! Redeem now."
+        },
+        {
+          "id": 28,
+          "label": "phishing",
+          "predicted_scam": false,
+          "score": 0.2,
+          "difficulty": "medium",
+          "kind": "false_negative",
+          "text": "We detected a login to your Google account from a new device. Secure your account now."
+        },
+        {
+          "id": 47,
+          "label": "legitimate",
+          "predicted_scam": true,
+          "score": 0.75,
+          "difficulty": "hard",
+          "kind": "false_positive",
+          "text": "Income Tax Dept: your ITR for AY 2026-27 has been successfully e-verified. No action neede"
+        },
+        {
+          "id": 60,
+          "label": "legitimate",
+          "predicted_scam": true,
+          "score": 0.8,
+          "difficulty": "hard",
+          "kind": "false_positive",
+          "text": "Your LinkedIn profile was viewed by 6 people this week. See who viewed it in the app."
+        }
+      ]
+    },
+    "text_keywords_only": {
       "tp": 15,
       "tn": 31,
       "fp": 1,
@@ -740,7 +790,7 @@
           "id": 19,
           "label": "upi_payment",
           "predicted_scam": false,
-          "score": 0.36,
+          "score": 0.18,
           "difficulty": "medium",
           "kind": "false_negative",
           "text": "I sent Rs 5,000 to your number by mistake. Please return it urgently to this UPI ID: rames"
@@ -956,7 +1006,7 @@
           "id": 70,
           "label": "phishing",
           "predicted_scam": false,
-          "score": 0.18,
+          "score": 0.0,
           "difficulty": "hard",
           "kind": "false_negative",
           "text": "Hi team, please find the revised salary sheet for November. Sign in with your company emai"
@@ -992,7 +1042,7 @@
           "id": 75,
           "label": "fake_job",
           "predicted_scam": false,
-          "score": 0.18,
+          "score": 0.0,
           "difficulty": "hard",
           "kind": "false_negative",
           "text": "We have a remote task job: complete 3 simple tasks, get Rs 500 instantly. For higher earni"
@@ -1036,669 +1086,75 @@
       ]
     },
     "integrated (warn or block = scam)": {
-      "tp": 18,
-      "tn": 31,
-      "fp": 1,
-      "fn": 30,
-      "accuracy": 0.613,
-      "precision": 0.947,
-      "recall": 0.375,
-      "f1": 0.537,
-      "false_positive_rate": 0.031,
+      "tp": 47,
+      "tn": 29,
+      "fp": 3,
+      "fn": 1,
+      "accuracy": 0.95,
+      "precision": 0.94,
+      "recall": 0.979,
+      "f1": 0.959,
+      "false_positive_rate": 0.094,
       "failed_examples": 0,
       "errors": [
-        {
-          "id": 19,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "I sent Rs 5,000 to your number by mistake. Please return it urgently to this UPI ID: rames"
-        },
-        {
-          "id": 20,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Scan this QR code to receive your Rs 3,000 cashback from PhonePe."
-        },
-        {
-          "id": 23,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "Hello, I am calling from GPay support. Share your UPI PIN so I can cancel the wrong transa"
-        },
-        {
-          "id": 26,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.2,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Your parcel is held at customs. Pay Rs 49 delivery fee to release it."
-        },
-        {
-          "id": 27,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.32,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "Income Tax Department: refund of Rs 18,420 approved. Submit your bank details to receive i"
-        },
         {
           "id": 28,
           "label": "phishing",
           "predicted_scam": false,
-          "score": 0.36,
+          "score": 0.32,
           "difficulty": "medium",
           "kind": "false_negative",
           "text": "We detected a login to your Google account from a new device. Secure your account now."
-        },
-        {
-          "id": 29,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your electricity connection will be disconnected tonight at 9:30 PM due to an unpaid bill."
-        },
-        {
-          "id": 30,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.24,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hi, please review the attached invoice and log in to view it."
-        },
-        {
-          "id": 31,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "Work from home! Earn Rs 5,000 daily by liking videos. No experience needed. Pay Rs 500 reg"
-        },
-        {
-          "id": 32,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Congratulations, you are selected for Infosys. Pay Rs 8,000 for laptop and training deposi"
-        },
-        {
-          "id": 33,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Part-time job: rate hotels online and earn Rs 800 per task. Join our Telegram group. Depos"
-        },
-        {
-          "id": 35,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Overseas job in Dubai with free visa. Pay Rs 60,000 for visa processing and hand your pass"
-        },
-        {
-          "id": 36,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Hi dear, I am a US army doctor posted overseas. I felt a connection with you. Can we chat "
-        },
-        {
-          "id": 38,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "I have sent you a gift parcel from London. Customs needs a Rs 25,000 clearing charge, plea"
-        },
-        {
-          "id": 39,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "You are the only person who understands me. I found a platform that doubled my money. Let "
-        },
-        {
-          "id": 40,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Darling, I need money for my mother's surgery. I am too embarrassed to ask anyone else. Pl"
         },
         {
           "id": 41,
           "label": "legitimate",
           "predicted_scam": true,
-          "score": 0.55,
+          "score": 0.47,
           "difficulty": "hard",
           "kind": "false_positive",
           "text": "Dear customer, your KYC is due for renewal. Please visit your nearest ICICI Bank branch wi"
         },
         {
-          "id": 63,
-          "label": "banking_kyc",
-          "predicted_scam": false,
-          "score": 0.0,
+          "id": 47,
+          "label": "legitimate",
+          "predicted_scam": true,
+          "score": 0.63,
           "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hello, I am calling from the fraud department of your bank. We noticed a suspicious transa"
+          "kind": "false_positive",
+          "text": "Income Tax Dept: your ITR for AY 2026-27 has been successfully e-verified. No action neede"
         },
         {
-          "id": 64,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
+          "id": 60,
+          "label": "legitimate",
+          "predicted_scam": true,
+          "score": 0.64,
           "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hi, I am sorry, I paid Rs 10,000 to your UPI by mistake. Can you send it back? I will send"
-        },
-        {
-          "id": 66,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "I am buying your sofa from OLX. I am sending Rs 1 to test. Please scan the QR code I sent "
-        },
-        {
-          "id": 67,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.2,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your Netflix payment failed and your subscription will be cancelled. Update your billing d"
-        },
-        {
-          "id": 68,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your parcel could not be delivered due to an incomplete address. Confirm your address and "
-        },
-        {
-          "id": 70,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.24,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hi team, please find the revised salary sheet for November. Sign in with your company emai"
-        },
-        {
-          "id": 71,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your electricity connection will be disconnected tonight at 9:30 PM as your last month's b"
-        },
-        {
-          "id": 72,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hello, we found your resume on Naukri. You are shortlisted for a Data Entry role, Rs 35,00"
-        },
-        {
-          "id": 74,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Congratulations, you have been selected for a work-from-home role at TCS. For the offer le"
-        },
-        {
-          "id": 75,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "We have a remote task job: complete 3 simple tasks, get Rs 500 instantly. For higher earni"
-        },
-        {
-          "id": 76,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Hello dear, I am an engineer working on an oil rig. I feel a special connection with you. "
-        },
-        {
-          "id": 77,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "I know we have only talked for two weeks but I trust you. My account is frozen and I need "
-        },
-        {
-          "id": 78,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.32,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Honey, my friend showed me a crypto trading app where I made a lot of profit. Try with a s"
-        },
-        {
-          "id": 79,
-          "label": "banking_kyc",
-          "predicted_scam": false,
-          "score": 0.34,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your credit card reward points worth Rs 7,450 will expire today. Redeem now by installing "
+          "kind": "false_positive",
+          "text": "Your LinkedIn profile was viewed by 6 people this week. See who viewed it in the app."
         }
       ]
     },
     "integrated (block only = scam)": {
-      "tp": 8,
+      "tp": 47,
       "tn": 32,
       "fp": 0,
-      "fn": 40,
-      "accuracy": 0.5,
+      "fn": 1,
+      "accuracy": 0.988,
       "precision": 1.0,
-      "recall": 0.167,
-      "f1": 0.286,
+      "recall": 0.979,
+      "f1": 0.989,
       "false_positive_rate": 0.0,
       "failed_examples": 0,
       "errors": [
         {
-          "id": 14,
-          "label": "banking_kyc",
-          "predicted_scam": false,
-          "score": 0.54,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "HDFC Bank: Your net banking is suspended due to incomplete KYC. Call 98XXXXXXXX now or the"
-        },
-        {
-          "id": 17,
-          "label": "banking_kyc",
-          "predicted_scam": false,
-          "score": 0.49,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Axis Bank alert: unusual login detected. Verify your identity within 2 hours or your accou"
-        },
-        {
-          "id": 18,
-          "label": "banking_kyc",
-          "predicted_scam": false,
-          "score": 0.69,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Dear user, your Aadhaar is not linked with your bank account. Link now to continue receivi"
-        },
-        {
-          "id": 19,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "I sent Rs 5,000 to your number by mistake. Please return it urgently to this UPI ID: rames"
-        },
-        {
-          "id": 20,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Scan this QR code to receive your Rs 3,000 cashback from PhonePe."
-        },
-        {
-          "id": 23,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "Hello, I am calling from GPay support. Share your UPI PIN so I can cancel the wrong transa"
-        },
-        {
-          "id": 24,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.63,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "Congrats! You won Rs 25,000 in the PhonePe lucky draw. Pay Rs 99 processing fee to claim."
-        },
-        {
-          "id": 25,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.4,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Your Netflix payment failed. Update your billing details within 24 hours to avoid cancella"
-        },
-        {
-          "id": 26,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.2,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Your parcel is held at customs. Pay Rs 49 delivery fee to release it."
-        },
-        {
-          "id": 27,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.32,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "Income Tax Department: refund of Rs 18,420 approved. Submit your bank details to receive i"
-        },
-        {
           "id": 28,
           "label": "phishing",
           "predicted_scam": false,
-          "score": 0.36,
+          "score": 0.32,
           "difficulty": "medium",
           "kind": "false_negative",
           "text": "We detected a login to your Google account from a new device. Secure your account now."
-        },
-        {
-          "id": 29,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your electricity connection will be disconnected tonight at 9:30 PM due to an unpaid bill."
-        },
-        {
-          "id": 30,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.24,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hi, please review the attached invoice and log in to view it."
-        },
-        {
-          "id": 31,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "Work from home! Earn Rs 5,000 daily by liking videos. No experience needed. Pay Rs 500 reg"
-        },
-        {
-          "id": 32,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Congratulations, you are selected for Infosys. Pay Rs 8,000 for laptop and training deposi"
-        },
-        {
-          "id": 33,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Part-time job: rate hotels online and earn Rs 800 per task. Join our Telegram group. Depos"
-        },
-        {
-          "id": 34,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.54,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Hiring data entry operators. Salary Rs 40,000 per month for 2 hours of work. Send Aadhaar,"
-        },
-        {
-          "id": 35,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Overseas job in Dubai with free visa. Pay Rs 60,000 for visa processing and hand your pass"
-        },
-        {
-          "id": 36,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Hi dear, I am a US army doctor posted overseas. I felt a connection with you. Can we chat "
-        },
-        {
-          "id": 37,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.54,
-          "difficulty": "easy",
-          "kind": "false_negative",
-          "text": "My love, I am stuck at the airport and my card is blocked. Please send Rs 40,000, I will r"
-        },
-        {
-          "id": 38,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "I have sent you a gift parcel from London. Customs needs a Rs 25,000 clearing charge, plea"
-        },
-        {
-          "id": 39,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "You are the only person who understands me. I found a platform that doubled my money. Let "
-        },
-        {
-          "id": 40,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Darling, I need money for my mother's surgery. I am too embarrassed to ask anyone else. Pl"
-        },
-        {
-          "id": 63,
-          "label": "banking_kyc",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hello, I am calling from the fraud department of your bank. We noticed a suspicious transa"
-        },
-        {
-          "id": 64,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hi, I am sorry, I paid Rs 10,000 to your UPI by mistake. Can you send it back? I will send"
-        },
-        {
-          "id": 65,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.54,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Congratulations! You won Rs 5,000 scratch card reward on your last UPI payment. Enter your"
-        },
-        {
-          "id": 66,
-          "label": "upi_payment",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "I am buying your sofa from OLX. I am sending Rs 1 to test. Please scan the QR code I sent "
-        },
-        {
-          "id": 67,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.2,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your Netflix payment failed and your subscription will be cancelled. Update your billing d"
-        },
-        {
-          "id": 68,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your parcel could not be delivered due to an incomplete address. Confirm your address and "
-        },
-        {
-          "id": 69,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.48,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Income Tax refund of Rs 14,860 is pending. Verify your bank account to receive it today: i"
-        },
-        {
-          "id": 70,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.24,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hi team, please find the revised salary sheet for November. Sign in with your company emai"
-        },
-        {
-          "id": 71,
-          "label": "phishing",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your electricity connection will be disconnected tonight at 9:30 PM as your last month's b"
-        },
-        {
-          "id": 72,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Hello, we found your resume on Naukri. You are shortlisted for a Data Entry role, Rs 35,00"
-        },
-        {
-          "id": 73,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.54,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Part time job offer: like and review products on Amazon, earn Rs 3,000 per day. Message us"
-        },
-        {
-          "id": 74,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.0,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Congratulations, you have been selected for a work-from-home role at TCS. For the offer le"
-        },
-        {
-          "id": 75,
-          "label": "fake_job",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "We have a remote task job: complete 3 simple tasks, get Rs 500 instantly. For higher earni"
-        },
-        {
-          "id": 76,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.18,
-          "difficulty": "medium",
-          "kind": "false_negative",
-          "text": "Hello dear, I am an engineer working on an oil rig. I feel a special connection with you. "
-        },
-        {
-          "id": 77,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.36,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "I know we have only talked for two weeks but I trust you. My account is frozen and I need "
-        },
-        {
-          "id": 78,
-          "label": "romance",
-          "predicted_scam": false,
-          "score": 0.32,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Honey, my friend showed me a crypto trading app where I made a lot of profit. Try with a s"
-        },
-        {
-          "id": 79,
-          "label": "banking_kyc",
-          "predicted_scam": false,
-          "score": 0.34,
-          "difficulty": "hard",
-          "kind": "false_negative",
-          "text": "Your credit card reward points worth Rs 7,450 will expire today. Redeem now by installing "
         }
       ]
     }

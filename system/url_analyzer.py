@@ -11,6 +11,11 @@ SHORTENERS = {"bit.ly", "tinyurl.com", "t.co", "goo.gl", "is.gd", "cutt.ly", "rb
 BRAND_WORDS = ["sbi", "hdfc", "icici", "axis", "paytm", "phonepe", "gpay", "irctc", "epfo"]
 EMBEDDED_MIN_LEN = 5   # brands this long are also flagged when glued inside a word
 
+# Suffixes that only regulated institutions can register (RBI: .bank.in for banks,
+# .fin.in for other financial institutions). Matched only at the END of the host,
+# after a dot, so 'icici.bank.in.evil.xyz' and 'icici-bank.in' do not qualify.
+PROTECTED_SUFFIXES = (".bank.in", ".fin.in")
+
 # Each signal has a hand-chosen weight (heuristic, not tuned on data yet).
 W_NO_HTTPS = 0.15
 W_IP_HOST = 0.40
@@ -43,6 +48,20 @@ def _is_official(host: str, brand: str) -> bool:
     return False
 
 
+def _under_protected_suffix(host: str) -> bool:
+    """True if the host really ends with a restricted suffix such as .bank.in."""
+    return any(host.endswith(sfx) and len(host) > len(sfx) for sfx in PROTECTED_SUFFIXES)
+
+
+def _label_count_host(host: str) -> str:
+    """Host with a restricted suffix counted as one ordinary TLD, so that
+    'www.icici.bank.in' is not penalised as having 'many subdomains'."""
+    for sfx in PROTECTED_SUFFIXES:
+        if host.endswith(sfx) and len(host) > len(sfx):
+            return host[: -len(sfx)] + ".in"
+    return host
+
+
 def analyze_url(url: str) -> AnalysisResult:
     if not isinstance(url, str) or not url.strip():
         return _result([], 0.0, "No URL provided.")
@@ -71,7 +90,7 @@ def analyze_url(url: str) -> AnalysisResult:
         findings.append(("'@' in URL", W_AT_SIGN))
     if host.count("-") >= 2:
         findings.append(("many hyphens in domain", W_HYPHENS))
-    if not is_ip and host.count(".") >= 3:
+    if not is_ip and _label_count_host(host).count(".") >= 3:
         findings.append(("many subdomains", W_SUBDOMAINS))
     if host.endswith(SUSPICIOUS_TLDS):
         findings.append(("suspicious TLD", W_TLD))
@@ -87,7 +106,7 @@ def analyze_url(url: str) -> AnalysisResult:
     words = [w for w in re.split(r"[.\-_]", host) if w]
     for b in BRAND_WORDS:
         appears = b in words or (len(b) >= EMBEDDED_MIN_LEN and any(b in w for w in words))
-        if appears and not _is_official(host, b):
+        if appears and not _is_official(host, b) and not _under_protected_suffix(host):
             findings.append((f"brand name '{b}' in non-official domain", W_BRAND))
 
     signals = [s for s, _ in findings]

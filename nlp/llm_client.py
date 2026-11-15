@@ -102,7 +102,7 @@ def _pace() -> None:
     _last_call = time.monotonic()
 
 
-def complete(system: str, user: str, max_tokens: int = 600, transport=None) -> str:
+def complete(system: str, user: str, max_tokens: int = 2000, transport=None) -> str:
     """Send one prompt, return the model's text. Busy-server errors (429/5xx) are
     retried, waiting for the provider's Retry-After when it gives one; anything
     else, or running out of retries, raises LLMUnavailable so callers can fall
