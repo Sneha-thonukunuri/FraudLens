@@ -1,0 +1,325 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: #08090d;
+    color: #f4f4f5;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+        radial-gradient(circle at 15% 15%, #25243c55 0, transparent 30%),
+        radial-gradient(circle at 85% 45%, #252d3b55 0, transparent 35%);
+}
+
+.navbar {
+    height: 85px;
+    padding: 0 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ffffff12;
+    background: #090a0dcc;
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: #9294ff;
+}
+
+.nav-links {
+    display: flex;
+    gap: 35px;
+}
+
+.nav-links a {
+    color: #a6a6b1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #aaaaff;
+}
+
+.status {
+    color: #8de5b0;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.hero {
+    text-align: center;
+    padding: 125px 20px 110px;
+}
+
+.eyebrow {
+    color: #999aff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(44px, 7vw, 76px);
+    line-height: 1.12;
+    letter-spacing: -3px;
+}
+
+.hero h1 span {
+    background: linear-gradient(90deg, #a4a5ff, #d3d3e8, #777bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-text {
+    color: #92929f;
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 550px;
+    margin: 25px auto 35px;
+}
+
+.explore-btn {
+    display: inline-block;
+    padding: 15px 27px;
+    border: 1px solid #8586ed;
+    border-radius: 5px;
+    color: #e6e6ff;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    transition: 0.3s;
+}
+
+.explore-btn:hover {
+    background: #7778e8;
+    color: white;
+    box-shadow: 0 0 25px #7778e855;
+}
+
+.analysis-section {
+    padding: 65px 8% 100px;
+    text-align: center;
+}
+
+.analysis-section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(27px, 4vw, 38px);
+    margin-bottom: 55px;
+}
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+
+.analysis-card {
+    position: relative;
+    overflow: hidden;
+   background: linear-gradient(
+    145deg,
+    rgba(45, 65, 115, 0.88),
+    rgba(30, 30, 55, 0.94),
+    rgba(20, 20, 35, 0.98)
+   );
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(145, 165, 255, 0.22);
+    border-radius: 18px;
+    padding: 32px 25px;
+    text-align: left;
+    min-height: 260px;
+    transition: all 0.35s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.analysis-card:hover {
+    transform: translateY(-9px);
+    border-color: rgba(125, 155, 255, 0.85);
+    background: linear-gradient(
+        145deg,
+        rgba(55, 65, 105, 0.85),
+        rgba(35, 30, 65, 0.9)
+    );
+    box-shadow:
+        0 12px 35px rgba(75, 105, 255, 0.2),
+        0 0 22px rgba(145, 95, 255, 0.15);
+}
+
+
+.card-icon {
+    color: #b9c5ff;
+    font-size: 30px;
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    border-radius: 16px;
+    background: linear-gradient(
+        135deg,
+        rgba(100, 130, 255, 0.22),
+        rgba(165, 100, 255, 0.12)
+    );
+    border: 1px solid rgba(160, 180, 255, 0.25);
+    box-shadow: 0 0 22px rgba(100, 130, 255, 0.12);
+}
+
+.analysis-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 19px;
+    margin-bottom: 12px;
+}
+
+.analysis-card p {
+    color: #92929f;
+    font-size: 13px;
+    line-height: 1.7;
+    min-height: 65px;
+}
+
+.analysis-card button {
+    margin-top: 20px;
+    padding: 12px 15px;
+    width: 100%;
+    border: 1px solid rgba(145, 170, 255, 0.65);
+    background: linear-gradient(
+        110deg,
+        rgba(65, 95, 180, 0.25),
+        rgba(125, 85, 190, 0.22)
+    );
+    color: #e1e8ff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.analysis-card button:hover {
+    background: linear-gradient(110deg, #527dff, #9865e8);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(100, 130, 255, 0.45);
+}
+
+footer {
+    border-top: 1px solid #ffffff15;
+    padding: 30px 15px;
+    text-align: center;
+    color: #656575;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+@media (max-width: 900px) {
+    .analysis-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 550px) {
+    .navbar {
+        padding: 0 5%;
+    }
+
+    .nav-links {
+        gap: 13px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 90px 18px;
+    }
+
+   .analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    width: 100%;
+}
+
+    .analysis-card {
+        min-width: 0;
+        box-sizing: border-box;
+}
+
+    .analysis-section {
+        padding: 50px 6%;
+    }
+}
+
+
+
+/* ===== FRAUDLENS COSMIC THEME ===== */
+
+body {
+    background:
+        radial-gradient(ellipse at 15% 20%, rgba(65, 75, 190, 0.22), transparent 42%),
+        radial-gradient(ellipse at 85% 35%, rgba(125, 55, 190, 0.18), transparent 40%),
+        radial-gradient(ellipse at 50% 90%, rgba(35, 100, 180, 0.15), transparent 45%),
+        #080a12;
+    background-attachment: fixed;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 75% 20%, rgba(150,180,255,0.6), transparent),
+        radial-gradient(1px 1px at 45% 70%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 90% 80%, rgba(180,150,255,0.5), transparent);
+    background-size: 250px 250px;
+}
+
+::selection {
+    background: rgba(110, 130, 255, 0.45);
+    color: white;
+}
+.analysis-section h2 {
+    background: linear-gradient(
+        90deg,
+        #ffffff,
+        #a9c5ff,
+        #c7a6ff
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -1px;
+}
