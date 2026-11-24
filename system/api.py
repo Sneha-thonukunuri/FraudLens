@@ -8,10 +8,19 @@ from nlp.analyzer import analyze_text, analyze_conversation
 from vision.analyzer import analyze_screenshot
 from system.url_analyzer import analyze_url
 from system.fusion import fuse
-
+from fastapi.middleware.cors import CORSMiddleware
 logger = logging.getLogger("fraudlens.api")
 app = FastAPI(title="FraudLens")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 MAX_IMAGE_BYTES = 5 * 1024 * 1024   # 5 MB upload limit
 ALLOWED_IMAGE_TYPES = {"image/png", "image/jpeg"}
 
